@@ -238,6 +238,15 @@ importers:
         specifier: ^19
         version: 19.0.0(react@19.0.0)
 
+  packages/resolver:
+    dependencies:
+      '@solana/web3.js':
+        specifier: '2'
+        version: 2.0.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.7.2)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))
+      typescript:
+        specifier: '>=5'
+        version: 5.7.2
+
   packages/test-config:
     dependencies:
       jest-dev-server:
