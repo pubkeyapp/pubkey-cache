@@ -1,6 +1,6 @@
 {
     "name": "@pubkey-cache/resolver",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "description": "Solana Javascript API",
     "exports": {
         "edge-light": {
@@ -44,7 +44,7 @@
         "web3"
     ],
     "scripts": {
-        "compile:js": "tsup --config build-scripts/tsup.config.library.ts",
+        "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c ../../node_modules/@pubkey-cache/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
@@ -67,7 +67,7 @@
         "url": "https://github.com/pubkeyapp/pubkey-cache"
     },
     "bugs": {
-        "url": "http://github.com/pubkeyapp/pubkey-cache/issues"
+        "url": "https://github.com/pubkeyapp/pubkey-cache/issues"
     },
     "browserslist": [
         "supports bigint and not dead",
@@ -76,8 +76,14 @@
     "dependencies": {
         "@solana/web3.js": "2"
     },
+    "devDependencies": {
+        "helius-sdk": "^1.4.2",
+        "unstorage": "^1.15.0"
+    },
     "peerDependencies": {
-        "typescript": ">=5"
+        "helius-sdk": "^1.4.2",
+        "typescript": ">=5",
+        "unstorage": "^1.15.0"
     },
     "engines": {
         "node": ">=20.18.0"

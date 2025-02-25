@@ -5,7 +5,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [synchronize, opened, reopened]
+    types: [ synchronize, opened, reopened ]
 
 env:
   # Among other things, opts out of Turborepo telemetry
@@ -31,7 +31,11 @@ jobs:
           version: current
 
       - name: Build
-        run: pnpm turbo compile:js --concurrency=${TURBO_CONCURRENCY:-1}
+        run: pnpm turbo compile:js compile:typedefs --concurrency=${TURBO_CONCURRENCY:-1}
 
       - name: BundleMon
         uses: lironer/bundlemon-action@v1
+        env:
+          # Always compare to the main branch; prevents stacked PRs from being
+          # compared to the wrong mergebase (ie. the PR beneath the current one)
+          CI_TARGET_BRANCH: main
