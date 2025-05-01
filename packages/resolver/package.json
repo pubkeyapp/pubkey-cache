@@ -74,7 +74,7 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@solana/web3.js": "2"
+        "@solana/kit": "^2.1.0"
     },
     "devDependencies": {
         "helius-sdk": "^1.4.2",
