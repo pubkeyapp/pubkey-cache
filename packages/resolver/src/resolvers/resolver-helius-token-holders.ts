@@ -1,3 +1,4 @@
+import { ResolverResultAsset } from '../types/resolver-result';
 import { ResolverResultMap } from '../types/resolver-result-map';
 import { heliusGetTokenHolders, HeliusGetTokenHoldersOptions } from './helius/helius-get-token-holders';
 
@@ -13,6 +14,7 @@ export async function resolverHeliusTokenHolders(options: HeliusGetTokenHoldersO
         if (asset.owner in holderMap) {
             holderMap[asset.owner].amount += amount;
             holderMap[asset.owner].addresses.push(asset.address);
+            holderMap[asset.owner].assets.push(asset as unknown as ResolverResultAsset);
             if (options.verbose) {
                 console.log(
                     `   => resolverHeliusTokenHolders [${options.mint}] => Owner ${asset.owner} has multiple addresses, adding ${asset.address}`,
@@ -20,7 +22,12 @@ export async function resolverHeliusTokenHolders(options: HeliusGetTokenHoldersO
             }
             continue;
         }
-        holderMap[asset.owner] = { addresses: [asset.address], amount, owner: asset.owner };
+        holderMap[asset.owner] = {
+            addresses: [asset.address],
+            amount,
+            assets: [asset as unknown as ResolverResultAsset],
+            owner: asset.owner,
+        };
     }
 
     return holderMap;
