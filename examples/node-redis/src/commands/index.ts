@@ -1,10 +1,10 @@
 import { Command } from './command'
 import { commandBalance } from './command-balance'
+import { commandCollectionHolders } from './command-collection-holders'
 import { commandDiscordLog } from './command-discord-log'
 import { commandGenesisHash } from './command-genesis-hash'
 import { commandHello } from './command-hello'
 import { commandHelp } from './command-help'
-import { commandNftHolders } from './command-nft-holders'
 import { commandResolverSync } from './command-resolver-sync'
 import { commandResolverSyncAll } from './command-resolver-sync-all'
 import { commandResolvers } from './command-resolvers'
@@ -18,7 +18,7 @@ export const commands: Record<string, Command> = {
   'a-resolver-sync-all': commandResolverSyncAll,
   'a-resolver-sync-one': commandResolverSync,
   'a-resolvers': commandResolvers,
-  'b-nft-holders': commandNftHolders,
+  'b-collection-holders': commandCollectionHolders,
   'b-token-holders': commandTokenHolders,
   'storage-get': commandStorageGet,
   'storage-keys': commandStorageKeys,

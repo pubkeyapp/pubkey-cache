@@ -1,4 +1,4 @@
-import { resolverHeliusNftHolders } from '@pubkey-cache/resolver'
+import { resolverHeliusCollectionHolders } from '@pubkey-cache/resolver'
 import prompts from 'prompts'
 
 import { ensureValidPublicKey } from '../lib/ensure-valid-public-key'
@@ -9,7 +9,7 @@ import { Command } from './command'
 let previousValue: string | undefined
 const config = getConfig()
 
-export const commandNftHolders: Command = {
+export const commandCollectionHolders: Command = {
   action: async (ctx: Context) => {
     const { collection } = await prompts({
       initial: previousValue,
@@ -31,7 +31,7 @@ export const commandNftHolders: Command = {
     }
     try {
       ensureValidPublicKey(collection)
-      const result = await resolverHeliusNftHolders({
+      const result = await resolverHeliusCollectionHolders({
         collection,
         helius: ctx.helius,
         verbose: config.verbose,
@@ -43,5 +43,5 @@ export const commandNftHolders: Command = {
     }
   },
   description: 'Get the holders of an NFT collection',
-  name: 'nft-holders',
+  name: 'collection-holders',
 }

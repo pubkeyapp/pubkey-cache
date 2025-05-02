@@ -1,9 +1,9 @@
 import { ResolverResultAsset } from '../types/resolver-result';
 import { ResolverResultMap } from '../types/resolver-result-map';
-import { heliusGetTokenHolders, HeliusGetTokenHoldersOptions } from './helius/helius-get-token-holders';
+import { HeliusGetTokenAccountsOptions, resolverHeliusTokenAccounts } from './resolver-helius-token-accounts';
 
-export async function resolverHeliusTokenHolders(options: HeliusGetTokenHoldersOptions): Promise<ResolverResultMap> {
-    const assets = await heliusGetTokenHolders(options);
+export async function resolverHeliusTokenHolders(options: HeliusGetTokenAccountsOptions): Promise<ResolverResultMap> {
+    const assets = await resolverHeliusTokenAccounts(options);
 
     const holderMap: ResolverResultMap = {};
     for (const asset of assets.items) {

@@ -1,7 +1,7 @@
-export interface ResolverResult {
+export interface ResolverResult<T = ResolverResultAsset> {
     addresses: string[];
     amount: number;
-    assets: ResolverResultAsset[];
+    assets: T[];
     owner: string;
 }
 

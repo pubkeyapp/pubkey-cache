@@ -1,12 +1,12 @@
 import { DAS, Helius } from 'helius-sdk';
 
-export interface HeliusGetTokenHoldersOptions {
+export interface HeliusGetTokenAccountsOptions {
     helius: Helius;
     mint: string;
     verbose?: boolean;
 }
 
-export interface TokenHolders {
+export interface HeliusTokenAccounts {
     items: DAS.TokenAccounts[];
     limit: number;
     page: number;
@@ -15,12 +15,14 @@ export interface TokenHolders {
 
 /**
  * Get token holders
- * @param options HeliusGetTokenHoldersOptions
+ * @param options HeliusGetTokenAccountsOptions
  */
-export async function heliusGetTokenHolders(options: HeliusGetTokenHoldersOptions): Promise<TokenHolders> {
+export async function resolverHeliusTokenAccounts(
+    options: HeliusGetTokenAccountsOptions,
+): Promise<HeliusTokenAccounts> {
     let page = 1;
     // Create a response list similar to the one returned by the API
-    const list: TokenHolders = {
+    const list: HeliusTokenAccounts = {
         items: [],
         limit: 1000,
         page,
@@ -30,14 +32,14 @@ export async function heliusGetTokenHolders(options: HeliusGetTokenHoldersOption
     // Loop through all pages of assets
     while (list.total < page * list.limit) {
         if (options.verbose) {
-            console.log(`   => heliusGetTokenHolders [${options.mint}] => Fetching page ${page}...`);
+            console.log(`   => heliusGetTokenAccounts [${options.mint}] => Fetching page ${page}...`);
         }
         const assets = await options.helius.rpc.getTokenAccounts({ limit: list.limit, mint: options.mint, page: page });
 
         if (!assets?.token_accounts?.length) {
             if (options.verbose) {
                 console.log(
-                    `   => heliusGetTokenHolders [${options.mint}] => No ${page > 1 ? 'more' : ''} token accounts found for mint ${options.mint}`,
+                    `   => heliusGetTokenAccounts [${options.mint}] => No ${page > 1 ? 'more' : ''} token accounts found for mint ${options.mint}`,
                 );
             }
             break;
@@ -54,7 +56,7 @@ export async function heliusGetTokenHolders(options: HeliusGetTokenHoldersOption
         if (assets.token_accounts.length < list.limit) {
             if (options.verbose) {
                 console.log(
-                    `   => heliusGetTokenHolders [${options.mint}] => No more token accounts found for mint ${options.mint}`,
+                    `   => heliusGetTokenAccounts [${options.mint}] => No more token accounts found for mint ${options.mint}`,
                 );
             }
             break;

@@ -1,24 +1,33 @@
 import { DAS, Helius } from 'helius-sdk';
 
-export interface HeliusGetNftHoldersOptions {
+export interface ResolverHeliusCollectionAssetsOptions {
     collection: string;
     helius: Helius;
     verbose?: boolean;
 }
 
+export interface HeliusCollectionAssets {
+    items: DAS.GetAssetResponse[];
+    limit: number;
+    page: number;
+    total: number;
+}
+
 /**
  * Get all assets by collection
- * @param options HeliusGetNftHoldersOptions
+ * @param options HeliusGetNftCollectionOptions
  */
-export async function heliusGetNftHolders(options: HeliusGetNftHoldersOptions): Promise<DAS.GetAssetResponseList> {
+export async function resolverHeliusCollectionAssets(
+    options: ResolverHeliusCollectionAssetsOptions,
+): Promise<HeliusCollectionAssets> {
     let page = 1;
     // Create a response list similar to the one returned by the API
-    const list: DAS.GetAssetResponseList = { items: [], limit: 1000, page, total: 0 };
+    const list: HeliusCollectionAssets = { items: [], limit: 1000, page, total: 0 };
 
     // Loop through all pages of assets
     while (list.total < page * list.limit) {
         if (options.verbose) {
-            console.log(`   => heliusGetNftHolders [${options.collection}] => Fetching page ${page}...`);
+            console.log(`   => heliusGetNftCollection [${options.collection}] => Fetching page ${page}...`);
         }
         const assets = await options.helius.rpc.getAssetsByGroup({
             groupKey: 'collection',
@@ -29,7 +38,7 @@ export async function heliusGetNftHolders(options: HeliusGetNftHoldersOptions): 
         if (assets.items.length === 0) {
             if (options.verbose) {
                 console.log(
-                    `   => heliusGetNftHolders [${options.collection}] => No ${page > 1 ? 'more' : ''} token accounts found for mint ${options.collection}`,
+                    `   => heliusGetNftCollection [${options.collection}] => No ${page > 1 ? 'more' : ''} assets found for collection ${options.collection}`,
                 );
             }
             break;
@@ -42,7 +51,7 @@ export async function heliusGetNftHolders(options: HeliusGetNftHoldersOptions): 
         if (assets.items.length < list.limit) {
             if (options.verbose) {
                 console.log(
-                    `   => heliusGetNftHolders [${options.collection}] => No more token accounts found for mint ${options.collection}`,
+                    `   => heliusGetNftCollection [${options.collection}] => No more assets found for collection ${options.collection}`,
                 );
             }
             break;

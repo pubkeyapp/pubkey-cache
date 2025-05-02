@@ -1,4 +1,4 @@
-import { resolve, storeResolverResultMap } from '@pubkey-cache/resolver'
+import { resolve, ResolverType } from '@pubkey-cache/resolver'
 
 import { getConfig } from '../lib/get-config'
 import { getContext } from '../lib/get-context'
@@ -14,25 +14,24 @@ export const commandResolverSyncAll: Command = {
     try {
       for (const resolver of resolvers) {
         const startTimeResolver = new Date().getTime()
-        const resultMap = await resolve({ context, resolver, verbose })
 
-        const { writeCount } = await storeResolverResultMap({
-          path: resolver.id,
-          resultMap,
-          storage: context.storage,
-        })
-        const endTimeResolver = new Date().getTime()
-        const durationResolver = endTimeResolver - startTimeResolver
+        if (
+          resolver.type === ResolverType['helius-collection-holders'] ||
+          resolver.type === ResolverType['helius-token-holders']
+        ) {
+          await resolve({ context, resolver, verbose })
 
-        results.push(
-          `Synced resolver ${resolver.id}, wrote ${writeCount} items to storage (${durationResolver / 1000} seconds)`,
-        )
-        await context.discordLog({
-          level: 'info',
-          message: `Wrote ${writeCount} items to storage (${durationResolver / 1000} seconds)`,
-          title: `Synced ${resolver.type} ${resolver.address}`,
-          url: `https://explorer.solana.com/address/${resolver.address}`,
-        })
+          const endTimeResolver = new Date().getTime()
+          const durationResolver = endTimeResolver - startTimeResolver
+
+          results.push(`Synced resolver ${resolver.id} took (${durationResolver / 1000} seconds)`)
+          await context.discordLog({
+            level: 'info',
+            message: `Synced resolver ${resolver.id} took (${durationResolver / 1000} seconds)`,
+            title: `Synced ${resolver.type} ${resolver.address}`,
+            url: `https://explorer.solana.com/address/${resolver.address}`,
+          })
+        }
       }
 
       const endTime = new Date().getTime()

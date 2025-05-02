@@ -1,9 +1,14 @@
 import { ResolverResultAsset } from '../types/resolver-result';
 import { ResolverResultMap } from '../types/resolver-result-map';
-import { heliusGetNftHolders, HeliusGetNftHoldersOptions } from './helius/helius-get-nft-holders';
+import {
+    resolverHeliusCollectionAssets,
+    ResolverHeliusCollectionAssetsOptions,
+} from './resolver-helius-collection-assets';
 
-export async function resolverHeliusNftHolders(options: HeliusGetNftHoldersOptions): Promise<ResolverResultMap> {
-    const assets = await heliusGetNftHolders(options);
+export async function resolverHeliusCollectionHolders(
+    options: ResolverHeliusCollectionAssetsOptions,
+): Promise<ResolverResultMap> {
+    const assets = await resolverHeliusCollectionAssets(options);
 
     const result: ResolverResultMap = {};
 
