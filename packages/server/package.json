@@ -77,19 +77,19 @@
         "@pubkey-cache/resolver": "workspace:*",
         "h3": "^1.15.1",
         "listhen": "^1.9.0",
-        "unstorage": "^1.15.0"
+        "unstorage": "^1.16.0"
     },
     "devDependencies": {
         "@types/jest": "^29.5.14",
         "@types/node": "^22.13.5",
-        "unstorage": "^1.15.0"
+        "unstorage": "^1.16.0"
     },
     "peerDependencies": {
         "h3": "^1.15.1",
         "helius-sdk": "^1.4.2",
         "listhen": "^1.9.0",
         "typescript": ">=5",
-        "unstorage": "^1.15.0"
+        "unstorage": "^1.16.0"
     },
     "engines": {
         "node": ">=20.18.0"
