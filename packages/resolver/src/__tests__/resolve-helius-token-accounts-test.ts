@@ -1,15 +1,13 @@
-import { Helius } from 'helius-sdk';
+import { DAS } from 'helius-sdk';
 
-import {
-    HeliusGetTokenAccountsOptions,
-    HeliusTokenAccounts,
-    resolverHeliusTokenAccounts,
-} from '../resolvers/resolver-helius-token-accounts'; // Adjust path as needed
+import { createMockHeliusInstance } from '../__setup__/create-mock-helius-instance'; // Adjust path as needed
+import { resolveHeliusTokenAccounts } from '../resolvers/helius/resolve-helius-token-accounts';
+import { ResolveResult } from '../types/resolve-result';
 
-describe('resolverHeliusTokenAccounts', () => {
+describe('resolve-helius-token-accounts', () => {
     // Test case 1: Multiple pages (1500 token accounts total)
     it('fetches all token accounts across multiple pages', async () => {
-        expect.assertions(7);
+        expect.assertions(9);
         // Arrange: Prepare mock data and behavior
         const mint = 'test-mint';
         const limit = 1000;
@@ -29,22 +27,31 @@ describe('resolverHeliusTokenAccounts', () => {
             return Promise.resolve({ token_accounts: [], total: 0 });
         });
 
-        const mockHelius = { rpc: { getTokenAccounts: mockGetTokenAccounts } } as unknown as Helius;
-
-        const options: HeliusGetTokenAccountsOptions = {
-            helius: mockHelius,
-            mint,
-            verbose: true,
-        };
+        const items: DAS.TokenAccounts[] = [];
 
         // Act: Call the function
-        const result: HeliusTokenAccounts = await resolverHeliusTokenAccounts(options);
+        const result: ResolveResult = await resolveHeliusTokenAccounts({
+            handler: page => {
+                items.push(...page.items);
+                return true;
+            },
+            instance: createMockHeliusInstance({ rpc: { getTokenAccounts: mockGetTokenAccounts } }),
+            params: { mint },
+        });
 
         // Assert: Verify the results
-        expect(result.items).toHaveLength(1500); // 1000 + 500 token accounts
+        expect(items).toHaveLength(1500); // 1000 + 500 token accounts
         expect(result.limit).toBe(limit);
-        expect(result.page).toBe(2); // Last page fetched was 2 (returned as page - 1)
+        expect(result.pages).toBe(2); // Last page fetched was 2 (returned as page - 1)
         expect(result.total).toBe(1500); // Accumulated total from mock responses
+        expect(result.errors).toMatchInlineSnapshot(`[]`);
+        expect(result.logs).toMatchInlineSnapshot(`
+            [
+              "resolveHeliusTokenAccounts [test-mint] => Fetching page 1...",
+              "resolveHeliusTokenAccounts [test-mint] => Fetching page 2...",
+              "resolveHeliusTokenAccounts [test-mint] => No more token accounts found for mint test-mint",
+            ]
+        `);
 
         // Verify mock calls
         expect(mockGetTokenAccounts).toHaveBeenCalledTimes(2);
@@ -68,18 +75,20 @@ describe('resolverHeliusTokenAccounts', () => {
         const mockResponse = { token_accounts: [], total: 0 };
 
         const mockGetTokenAccounts = jest.fn().mockResolvedValue(mockResponse);
-        const mockHelius = { rpc: { getTokenAccounts: mockGetTokenAccounts } } as unknown as Helius;
-        const options: HeliusGetTokenAccountsOptions = {
-            helius: mockHelius,
-            mint,
-            verbose: true,
-        };
 
-        const result: HeliusTokenAccounts = await resolverHeliusTokenAccounts(options);
+        const items: DAS.TokenAccounts[] = [];
+        const result: ResolveResult = await resolveHeliusTokenAccounts({
+            handler: page => {
+                items.push(...page.items);
+                return true;
+            },
+            instance: createMockHeliusInstance({ rpc: { getTokenAccounts: mockGetTokenAccounts } }),
+            params: { mint },
+        });
 
-        expect(result.items).toHaveLength(0);
+        expect(items).toHaveLength(0);
         expect(result.limit).toBe(limit);
-        expect(result.page).toBe(0); // Page 1 - 1, since no items were fetched
+        expect(result.pages).toBe(0); // Page 1 - 1, since no items were fetched
         expect(result.total).toBe(0);
 
         expect(mockGetTokenAccounts).toHaveBeenCalledTimes(1);
@@ -99,18 +108,20 @@ describe('resolverHeliusTokenAccounts', () => {
         const mockResponse = { token_accounts: mockAccounts, total: 800 };
 
         const mockGetTokenAccounts = jest.fn().mockResolvedValue(mockResponse);
-        const mockHelius = { rpc: { getTokenAccounts: mockGetTokenAccounts } } as unknown as Helius;
-        const options: HeliusGetTokenAccountsOptions = {
-            helius: mockHelius,
-            mint,
-            verbose: true,
-        };
 
-        const result: HeliusTokenAccounts = await resolverHeliusTokenAccounts(options);
+        const items: DAS.TokenAccounts[] = [];
+        const result: ResolveResult = await resolveHeliusTokenAccounts({
+            handler: page => {
+                items.push(...page.items);
+                return true;
+            },
+            instance: createMockHeliusInstance({ rpc: { getTokenAccounts: mockGetTokenAccounts } }),
+            params: { mint },
+        });
 
-        expect(result.items).toHaveLength(800);
+        expect(items).toHaveLength(800);
         expect(result.limit).toBe(limit);
-        expect(result.page).toBe(1); // Only fetched page 1
+        expect(result.pages).toBe(1); // Only fetched page 1
         expect(result.total).toBe(800);
 
         expect(mockGetTokenAccounts).toHaveBeenCalledTimes(1);
@@ -135,18 +146,19 @@ describe('resolverHeliusTokenAccounts', () => {
             if (options.page === 1) return Promise.resolve(mockResponsePage1);
             return Promise.resolve(mockResponsePage2);
         });
-        const mockHelius = { rpc: { getTokenAccounts: mockGetTokenAccounts } } as unknown as Helius;
-        const options: HeliusGetTokenAccountsOptions = {
-            helius: mockHelius,
-            mint,
-            verbose: true,
-        };
+        const items: DAS.TokenAccounts[] = [];
+        const result: ResolveResult = await resolveHeliusTokenAccounts({
+            handler: page => {
+                items.push(...page.items);
+                return true;
+            },
+            instance: createMockHeliusInstance({ rpc: { getTokenAccounts: mockGetTokenAccounts } }),
+            params: { mint },
+        });
 
-        const result: HeliusTokenAccounts = await resolverHeliusTokenAccounts(options);
-
-        expect(result.items).toHaveLength(1000);
+        expect(items).toHaveLength(1000);
         expect(result.limit).toBe(limit);
-        expect(result.page).toBe(1); // Fetched page 2 and got 0 items
+        expect(result.pages).toBe(1); // Fetched page 2 and got 0 items
         expect(result.total).toBe(1000);
 
         expect(mockGetTokenAccounts).toHaveBeenCalledTimes(2);

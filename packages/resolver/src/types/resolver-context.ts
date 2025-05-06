@@ -1,5 +1,9 @@
-import { Helius } from 'helius-sdk';
+import { NetworkCluster } from './network-cluster';
+import { ResolverConfig } from './resolver-config';
+import { ResolverConfigType } from './resolver-config-type';
 
-export interface ResolverContext {
-    helius: Helius;
+export interface ResolverContext<T = ResolverConfig> {
+    clusters: NetworkCluster[];
+    config: T;
+    provides: ResolverConfigType[];
 }

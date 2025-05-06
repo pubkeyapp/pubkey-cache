@@ -1,6 +1,5 @@
 import { Command } from './command'
 import { commandBalance } from './command-balance'
-import { commandCollectionHolders } from './command-collection-holders'
 import { commandDiscordLog } from './command-discord-log'
 import { commandGenesisHash } from './command-genesis-hash'
 import { commandHello } from './command-hello'
@@ -12,14 +11,11 @@ import { commandStorageGet } from './command-storage-get'
 import { commandStorageKeys } from './command-storage-keys'
 import { commandStorageRemove } from './command-storage-remove'
 import { commandStorageSet } from './command-storage-set'
-import { commandTokenHolders } from './command-token-holders'
 
 export const commands: Record<string, Command> = {
   'a-resolver-sync-all': commandResolverSyncAll,
   'a-resolver-sync-one': commandResolverSync,
   'a-resolvers': commandResolvers,
-  'b-collection-holders': commandCollectionHolders,
-  'b-token-holders': commandTokenHolders,
   'storage-get': commandStorageGet,
   'storage-keys': commandStorageKeys,
   'storage-remove': commandStorageRemove,

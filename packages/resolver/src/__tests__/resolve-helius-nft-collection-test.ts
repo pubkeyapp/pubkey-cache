@@ -1,15 +1,16 @@
-import { Helius } from 'helius-sdk';
+import { DAS } from 'helius-sdk';
 
+import { createMockHeliusInstance } from '../__setup__/create-mock-helius-instance';
 import {
-    HeliusCollectionAssets,
-    resolverHeliusCollectionAssets,
-    ResolverHeliusCollectionAssetsOptions,
-} from '../resolvers/resolver-helius-collection-assets';
+    resolveHeliusCollectionAssets,
+    ResolveHeliusCollectionAssetsParams,
+} from '../resolvers/helius/resolve-helius-collection-assets';
+import { ResolveResult } from '../types/resolve-result';
 
-describe('resolverHeliusNftCollection', () => {
+describe('resolve-helius-collection-assets', () => {
     // Test case 1: Multiple pages (1500 items total)
     it('fetches all assets across multiple pages', async () => {
-        expect.assertions(7);
+        expect.assertions(9);
         // Arrange: Prepare mock data and behavior
         const collection = 'test-collection';
         const limit = 1000;
@@ -29,22 +30,31 @@ describe('resolverHeliusNftCollection', () => {
             return Promise.resolve({ items: [], total: 0 });
         });
 
-        const mockHelius = { rpc: { getAssetsByGroup: mockGetAssetsByGroup } } as unknown as Helius;
-
-        const options: ResolverHeliusCollectionAssetsOptions = {
-            collection,
-            helius: mockHelius, // Type cast since Helius has more properties we don’t need to mock
-            verbose: true,
-        };
+        const items: DAS.GetAssetResponse[] = [];
 
         // Act: Call the function
-        const result: HeliusCollectionAssets = await resolverHeliusCollectionAssets(options);
+        const result: ResolveResult = await resolveHeliusCollectionAssets({
+            handler: page => {
+                items.push(...page.items);
+                return true;
+            },
+            instance: createMockHeliusInstance({ rpc: { getAssetsByGroup: mockGetAssetsByGroup } }),
+            params: { collection },
+        });
 
         // Assert: Verify the results
-        expect(result.items).toHaveLength(1500); // 1000 + 500 items
+        expect(items).toHaveLength(1500); // 1000 + 500 items
         expect(result.limit).toBe(limit);
-        expect(result.page).toBe(2); // Last page fetched was 2 (returned as page - 1)
+        expect(result.pages).toBe(2); // Last page fetched was 2 (returned as page - 1)
         expect(result.total).toBe(1500); // Accumulated total from mock responses
+        expect(result.errors).toMatchInlineSnapshot(`[]`);
+        expect(result.logs).toMatchInlineSnapshot(`
+            [
+              "resolveHeliusCollectionAssets [test-collection] => Fetching page 1...",
+              "resolveHeliusCollectionAssets [test-collection] => Fetching page 2...",
+              "resolveHeliusCollectionAssets [test-collection] => No more assets found for collection test-collection",
+            ]
+        `);
 
         // Verify mock calls
         expect(mockGetAssetsByGroup).toHaveBeenCalledTimes(2);
@@ -68,20 +78,21 @@ describe('resolverHeliusNftCollection', () => {
         const collection = 'empty-collection';
         const limit = 1000;
         const mockResponse = { items: [], total: 0 };
-
         const mockGetAssetsByGroup = jest.fn().mockResolvedValue(mockResponse);
-        const mockHelius = { rpc: { getAssetsByGroup: mockGetAssetsByGroup } } as unknown as Helius;
-        const options: ResolverHeliusCollectionAssetsOptions = {
-            collection,
-            helius: mockHelius,
-            verbose: true,
-        };
+        const items: DAS.GetAssetResponse[] = [];
 
-        const result: HeliusCollectionAssets = await resolverHeliusCollectionAssets(options);
+        const result: ResolveResult = await resolveHeliusCollectionAssets({
+            handler: page => {
+                items.push(...page.items);
+                return true;
+            },
+            instance: createMockHeliusInstance({ rpc: { getAssetsByGroup: mockGetAssetsByGroup } }),
+            params: { collection },
+        });
 
-        expect(result.items).toHaveLength(0);
+        expect(items).toHaveLength(0);
         expect(result.limit).toBe(limit);
-        expect(result.page).toBe(0); // Page 1 - 1, since no items were fetched
+        expect(result.pages).toBe(0); // Page 1 - 1, since no items were fetched
         expect(result.total).toBe(0);
 
         expect(mockGetAssetsByGroup).toHaveBeenCalledTimes(1);
@@ -100,20 +111,22 @@ describe('resolverHeliusNftCollection', () => {
         const limit = 1000;
         const mockItems = Array.from({ length: 800 }, (_, i) => ({ id: `asset${i}` }));
         const mockResponse = { items: mockItems, total: 800 };
-
         const mockGetAssetsByGroup = jest.fn().mockResolvedValue(mockResponse);
-        const mockHelius = { rpc: { getAssetsByGroup: mockGetAssetsByGroup } } as unknown as Helius;
-        const options: ResolverHeliusCollectionAssetsOptions = {
-            collection,
-            helius: mockHelius,
-            verbose: true,
-        };
+        const items: DAS.GetAssetResponse[] = [];
+        const params: ResolveHeliusCollectionAssetsParams = { collection };
 
-        const result: HeliusCollectionAssets = await resolverHeliusCollectionAssets(options);
+        const result: ResolveResult = await resolveHeliusCollectionAssets({
+            handler: page => {
+                items.push(...page.items);
+                return true;
+            },
+            instance: createMockHeliusInstance({ rpc: { getAssetsByGroup: mockGetAssetsByGroup } }),
+            params,
+        });
 
-        expect(result.items).toHaveLength(800);
+        expect(items).toHaveLength(800);
         expect(result.limit).toBe(limit);
-        expect(result.page).toBe(1); // Only fetched page 1
+        expect(result.pages).toBe(1); // Only fetched page 1
         expect(result.total).toBe(800);
 
         expect(mockGetAssetsByGroup).toHaveBeenCalledTimes(1);
@@ -139,18 +152,22 @@ describe('resolverHeliusNftCollection', () => {
             if (options.page === 1) return Promise.resolve(mockResponsePage1);
             return Promise.resolve(mockResponsePage2);
         });
-        const mockHelius = { rpc: { getAssetsByGroup: mockGetAssetsByGroup } } as unknown as Helius;
-        const options: ResolverHeliusCollectionAssetsOptions = {
-            collection,
-            helius: mockHelius,
-            verbose: true,
-        };
 
-        const result: HeliusCollectionAssets = await resolverHeliusCollectionAssets(options);
+        const items: DAS.GetAssetResponse[] = [];
+        const params: ResolveHeliusCollectionAssetsParams = { collection };
 
-        expect(result.items).toHaveLength(1000);
+        const result: ResolveResult = await resolveHeliusCollectionAssets({
+            handler: page => {
+                items.push(...page.items);
+                return true;
+            },
+            instance: createMockHeliusInstance({ rpc: { getAssetsByGroup: mockGetAssetsByGroup } }),
+            params,
+        });
+
+        expect(items).toHaveLength(1000);
         expect(result.limit).toBe(limit);
-        expect(result.page).toBe(1); // Fetched page 2 and got 0 items
+        expect(result.pages).toBe(1); // Fetched page 2 and got 0 items
         expect(result.total).toBe(1000);
 
         expect(mockGetAssetsByGroup).toHaveBeenCalledTimes(2);
