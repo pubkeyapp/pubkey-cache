@@ -9,7 +9,7 @@ import { resolve } from './resolve'
 
 export const commandResolverSyncAll: Command = {
   action: async () => {
-    const { resolvers, verbose, heliusApiKey } = getConfig()
+    const { resolvers, heliusApiKey } = getConfig()
     const context = getContext()
     const startTime = new Date().getTime()
     const results: string[] = []

@@ -2,7 +2,7 @@ import { Helius } from 'helius-sdk';
 
 import { createResolverContextHelius } from '../resolvers/helius/create-resolver-context-helius';
 import { createResolverContextHeliusInstance } from '../resolvers/helius/create-resolver-context-helius-instance';
-import { type ResolverContextHelius } from '../resolvers/helius/types/resolver-context-helius';
+import { ResolverContextHelius } from '../resolvers/helius/types/resolver-context-helius';
 
 describe('create-resolver-context-helius-instance', () => {
     const heliusApiKey = '00000000-0000-0000-0000-000000000000';

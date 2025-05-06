@@ -1,5 +1,5 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-import { ResolverConfigSolanaClientSchema } from '../resolver-config-solana-client-schema';
+import { getResolverConfigSolanaClientSchema } from '../get-resolver-config-solana-client-schema';
 
-export type ResolverConfigSolanaClientType = z.infer<typeof ResolverConfigSolanaClientSchema>;
+export type ResolverConfigSolanaClientType = v.InferOutput<ReturnType<typeof getResolverConfigSolanaClientSchema>>;

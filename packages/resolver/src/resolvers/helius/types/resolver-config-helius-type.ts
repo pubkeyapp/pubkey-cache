@@ -1,5 +1,5 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-import { ResolverConfigHeliusSchema } from '../resolver-config-helius-schema';
+import { getResolverConfigHeliusSchema } from '../get-resolver-config-helius-schema';
 
-export type ResolverConfigHeliusType = z.infer<typeof ResolverConfigHeliusSchema>;
+export type ResolverConfigHeliusType = v.InferOutput<ReturnType<typeof getResolverConfigHeliusSchema>>;

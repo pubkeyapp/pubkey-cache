@@ -86,7 +86,7 @@
     },
     "peerDependencies": {
         "h3": "^1.15.1",
-        "helius-sdk": "^1.4.2",
+        "helius-sdk": "^1.5.1",
         "listhen": "^1.9.0",
         "typescript": ">=5",
         "unstorage": "^1.15.0"

@@ -69,26 +69,9 @@ describe('create-resolver-context-solana-client', () => {
             const config: ResolverConfigSolanaClientInput = { endpoint: 'this is not a url' };
 
             // ASSERT
-            expect(() => createResolverContextSolanaClient(config)).toThrowErrorMatchingInlineSnapshot(`
-                "[
-                  {
-                    "validation": "url",
-                    "code": "invalid_string",
-                    "message": "Invalid url",
-                    "path": [
-                      "endpoint"
-                    ]
-                  },
-                  {
-                    "validation": "url",
-                    "code": "invalid_string",
-                    "message": "Invalid url",
-                    "path": [
-                      "endpointWs"
-                    ]
-                  }
-                ]"
-            `);
+            expect(() => createResolverContextSolanaClient(config)).toThrowErrorMatchingInlineSnapshot(
+                `"Invalid URL: Received "this is not a url""`,
+            );
         });
         it('should thrown an error with an invalid endpointWs', () => {
             expect.assertions(1);
@@ -96,18 +79,9 @@ describe('create-resolver-context-solana-client', () => {
             const config: ResolverConfigSolanaClientInput = { endpoint, endpointWs: 'not a ws endpoint' };
 
             // ASSERT
-            expect(() => createResolverContextSolanaClient(config)).toThrowErrorMatchingInlineSnapshot(`
-                "[
-                  {
-                    "validation": "url",
-                    "code": "invalid_string",
-                    "message": "Invalid url",
-                    "path": [
-                      "endpointWs"
-                    ]
-                  }
-                ]"
-            `);
+            expect(() => createResolverContextSolanaClient(config)).toThrowErrorMatchingInlineSnapshot(
+                `"Invalid URL: Received "not a ws endpoint""`,
+            );
         });
 
         it('should thrown an error with an invalid cluster', () => {
@@ -120,24 +94,9 @@ describe('create-resolver-context-solana-client', () => {
             };
 
             // ASSERT
-            expect(() => createResolverContextSolanaClient(config)).toThrowErrorMatchingInlineSnapshot(`
-                "[
-                  {
-                    "received": "random",
-                    "code": "invalid_enum_value",
-                    "options": [
-                      "mainnet",
-                      "devnet",
-                      "testnet",
-                      "localnet"
-                    ],
-                    "path": [
-                      "cluster"
-                    ],
-                    "message": "Invalid enum value. Expected 'mainnet' | 'devnet' | 'testnet' | 'localnet', received 'random'"
-                  }
-                ]"
-            `);
+            expect(() => createResolverContextSolanaClient(config)).toThrowErrorMatchingInlineSnapshot(
+                `"Invalid type: Expected ("mainnet" | "devnet" | "testnet" | "localnet") but received "random""`,
+            );
         });
     });
 });

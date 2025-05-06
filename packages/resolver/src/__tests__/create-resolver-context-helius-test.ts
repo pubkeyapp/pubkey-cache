@@ -68,18 +68,9 @@ describe('create-resolver-context-helius', () => {
             const config: ResolverConfigHeliusInput = { heliusApiKey: '00000000000000000000000000000000' };
 
             // ASSERT
-            expect(() => createResolverContextHelius(config)).toThrowErrorMatchingInlineSnapshot(`
-            "[
-              {
-                "validation": "uuid",
-                "code": "invalid_string",
-                "message": "Invalid uuid",
-                "path": [
-                  "heliusApiKey"
-                ]
-              }
-            ]"
-        `);
+            expect(() => createResolverContextHelius(config)).toThrowErrorMatchingInlineSnapshot(
+                `"Invalid UUID: Received "00000000000000000000000000000000""`,
+            );
         });
 
         it('should thrown an error with an invalid cluster', () => {
@@ -92,22 +83,9 @@ describe('create-resolver-context-helius', () => {
             };
 
             // ASSERT
-            expect(() => createResolverContextHelius(config)).toThrowErrorMatchingInlineSnapshot(`
-            "[
-              {
-                "received": "testnet",
-                "code": "invalid_enum_value",
-                "options": [
-                  "mainnet-beta",
-                  "devnet"
-                ],
-                "path": [
-                  "heliusCluster"
-                ],
-                "message": "Invalid enum value. Expected 'mainnet-beta' | 'devnet', received 'testnet'"
-              }
-            ]"
-        `);
+            expect(() => createResolverContextHelius(config)).toThrowErrorMatchingInlineSnapshot(
+                `"Invalid type: Expected ("mainnet-beta" | "devnet") but received "testnet""`,
+            );
         });
     });
 });

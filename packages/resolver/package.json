@@ -74,16 +74,16 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@solana/kit": "^2.1.0",
-        "gill": "^0.9.0",
-        "zod": "^3.24.3"
+        "valibot": "^1.1.0"
     },
     "devDependencies": {
-        "helius-sdk": "^1.4.2",
+        "helius-sdk": "^1.5.1",
         "unstorage": "^1.15.0"
     },
     "peerDependencies": {
-        "helius-sdk": "^1.4.2",
+        "@solana/kit": "^2.1.0",
+        "gill": "^0.9.0",
+        "helius-sdk": "^1.5.1",
         "typescript": ">=5",
         "unstorage": "^1.15.0"
     },
