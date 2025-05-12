@@ -1,5 +1,4 @@
-import { createResolverContextHelius } from '@pubkey-cache/resolver/src'
-import { createResolverContextHeliusInstance } from '@pubkey-cache/resolver/src/resolvers/helius/create-resolver-context-helius-instance'
+import { createResolverContextHelius, createResolverContextHeliusInstance } from '@pubkey-cache/resolver'
 import prompts from 'prompts'
 
 import { getConfig } from '../lib/get-config'

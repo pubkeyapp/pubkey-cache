@@ -74,6 +74,8 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@solana/spl-governance": "^0.3.28",
+        "@solana/web3.js": "^1.98.2",
         "valibot": "^1.1.0"
     },
     "devDependencies": {

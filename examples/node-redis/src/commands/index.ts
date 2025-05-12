@@ -4,6 +4,7 @@ import { commandDiscordLog } from './command-discord-log'
 import { commandGenesisHash } from './command-genesis-hash'
 import { commandHello } from './command-hello'
 import { commandHelp } from './command-help'
+import { commandRealmGovernanceAccounts } from './command-realm-governance-accounts'
 import { commandResolverSync } from './command-resolver-sync'
 import { commandResolverSyncAll } from './command-resolver-sync-all'
 import { commandResolvers } from './command-resolvers'
@@ -13,6 +14,7 @@ import { commandStorageRemove } from './command-storage-remove'
 import { commandStorageSet } from './command-storage-set'
 
 export const commands: Record<string, Command> = {
+  'a-realms-governance-accounts': commandRealmGovernanceAccounts,
   'a-resolver-sync-all': commandResolverSyncAll,
   'a-resolver-sync-one': commandResolverSync,
   'a-resolvers': commandResolvers,

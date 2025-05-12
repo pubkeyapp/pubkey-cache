@@ -1,9 +1,14 @@
+import { Connection } from '@solana/web3.js';
+
 import { ResolverConfigRealms } from '../types/resolver-config-realms';
 
-export function getRealms({ cluster, realms, type }: ResolverConfigRealms) {
+export function getRealms({ endpoint, realm, type }: ResolverConfigRealms) {
     return {
-        cluster,
-        realms,
+        connection: new Connection(endpoint, 'confirmed'),
+        getRealmsVoteAccounts: async () => {
+            //
+        },
+        realm,
         type,
     };
 }
