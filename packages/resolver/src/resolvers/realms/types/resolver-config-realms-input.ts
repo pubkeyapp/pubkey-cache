@@ -1,6 +1,3 @@
 import { ResolverConfigRealmsType } from './resolver-config-realms-type';
 
-export type ResolverConfigRealmsInput = Partial<Omit<ResolverConfigRealmsType, 'type'>> & {
-    realm: string;
-    tokenMint: string;
-};
+export type ResolverConfigRealmsInput = Partial<Omit<ResolverConfigRealmsType, 'type'>>;

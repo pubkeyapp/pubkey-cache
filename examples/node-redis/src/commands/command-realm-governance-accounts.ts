@@ -13,6 +13,11 @@ let previousTokenMint = 'Ds52CDgqdWbTWsua1hgT3AuSSy4FNx2Ezge1br3jQ14a'
 
 export const commandRealmGovernanceAccounts: Command = {
   action: async () => {
+    const heliusApiKey = process.env.HELIUS_API_KEY
+    if (!heliusApiKey) {
+      throw new Error('HELIUS_API_KEY is not set')
+    }
+    const endpoint = `https://mainnet.helius-rpc.com/?api-key=${heliusApiKey}`
     const { realm, tokenMint } = await prompts([
       {
         initial: previousRealms,
@@ -23,23 +28,21 @@ export const commandRealmGovernanceAccounts: Command = {
           try {
             ensureValidPublicKey(publicKey)
             return true
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          } catch (error: unknown) {
+          } catch {
             return false
           }
         },
       },
       {
         initial: previousTokenMint,
-        message: 'Enter a governanec token mint public key',
+        message: 'Enter a governance token mint public key',
         name: 'tokenMint',
         type: 'text',
         validate: (publicKey) => {
           try {
             ensureValidPublicKey(publicKey)
             return true
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          } catch (error: unknown) {
+          } catch {
             return false
           }
         },
@@ -52,26 +55,20 @@ export const commandRealmGovernanceAccounts: Command = {
       previousTokenMint = tokenMint
     }
     try {
-      const context = createResolverContextRealms({
-        endpoint: 'https://mainnet.helius-rpc.com/?api-key=e5a5c85e-ed0f-4831-8bb0-4ddac91cab67',
-        realm,
-        tokenMint,
-      })
+      const context = createResolverContextRealms({ endpoint })
       const instance = createResolverContextRealmsInstance(context)
 
       const items: unknown[] = []
       await resolverRealmsGovernanceAccounts({
         handler: (page) => {
-          console.log(`Handling data:`, page)
-          items.push(page)
+          items.push(...page.items)
           return true
         },
         instance,
         params: { realm, tokenMint },
       })
-      console.log(`Items:`, JSON.stringify(items, null, 2))
 
-      return [null, `Done`]
+      return [null, `${JSON.stringify(items.slice(0, 10), null, 2)}... (truncated, ${items.length} total)`]
     } catch (error) {
       return [new Error(error as string), null]
     }

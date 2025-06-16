@@ -74,6 +74,8 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@coral-xyz/anchor": "0.29.0",
+        "@solana/governance-program-library": "npm:@civic/governance-program-library@0.18.2-beta.24",
         "@solana/spl-governance": "^0.3.28",
         "@solana/web3.js": "^1.98.2",
         "valibot": "^1.1.0"
