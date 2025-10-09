@@ -72,7 +72,7 @@
     ],
     "dependencies": {
         "@pubkey-cache/core": "workspace:*",
-        "@solana/kit": "^2.1.0"
+        "@solana/kit": "^4.0.0"
     },
     "devDependencies": {
         "@types/react": "^19",
