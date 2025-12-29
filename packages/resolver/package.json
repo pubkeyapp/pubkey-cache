@@ -78,14 +78,14 @@
     },
     "devDependencies": {
         "helius-sdk": "^1.5.1",
-        "unstorage": "^1.15.0"
+        "unstorage": "^1.17.3"
     },
     "peerDependencies": {
         "@solana/kit": "^2.1.0",
         "gill": "^0.9.0",
         "helius-sdk": "^1.5.1",
         "typescript": ">=5",
-        "unstorage": "^1.15.0"
+        "unstorage": "^1.17.3"
     },
     "engines": {
         "node": ">=20.18.0"
