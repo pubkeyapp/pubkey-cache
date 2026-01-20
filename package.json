@@ -25,7 +25,7 @@
         "@pubkey-cache/test-config": "workspace:*",
         "@pubkey-cache/test-matchers": "workspace:*",
         "@pubkey-cache/tsconfig": "workspace:*",
-        "@swc/jest": "^0.2.37",
+        "@swc/jest": "^0.2.39",
         "@types/jest": "^29.5.14",
         "@types/node": "^22",
         "@typescript-eslint/eslint-plugin": "^8.17.0",
