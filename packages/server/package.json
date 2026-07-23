@@ -76,7 +76,7 @@
     "dependencies": {
         "@pubkey-cache/resolver": "workspace:*",
         "h3": "^1.15.1",
-        "listhen": "^1.9.0",
+        "listhen": "^1.10.1",
         "unstorage": "^1.15.0"
     },
     "devDependencies": {
@@ -87,7 +87,7 @@
     "peerDependencies": {
         "h3": "^1.15.1",
         "helius-sdk": "^1.5.1",
-        "listhen": "^1.9.0",
+        "listhen": "^1.10.1",
         "typescript": ">=5",
         "unstorage": "^1.15.0"
     },
