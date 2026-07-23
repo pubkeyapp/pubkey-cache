@@ -31,7 +31,7 @@
     "@pubkey-cache/resolver": "workspace:*",
     "@pubkey-cache/server": "workspace:*",
     "@solana/web3.js": "^1.98.2",
-    "esrun": "^3.2.26",
+    "esrun": "^3.2.30",
     "h3": "^1.15.1",
     "helius-sdk": "^1.5.1",
     "ioredis": "^5.5.0",
