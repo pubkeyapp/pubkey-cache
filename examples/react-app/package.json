@@ -15,7 +15,7 @@
     "dependencies": {
         "@pubkey-cache/core": "workspace:*",
         "@pubkey-cache/react": "workspace:*",
-        "@solana/kit": "^2.1.0",
+        "@solana/kit": "^7.0.0",
         "react": "^19",
         "react-dom": "^19",
         "react-error-boundary": "^5.0.0",
