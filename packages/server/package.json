@@ -80,7 +80,7 @@
         "unstorage": "^1.15.0"
     },
     "devDependencies": {
-        "@types/jest": "^29.5.14",
+        "@types/jest": "^30.0.0",
         "@types/node": "^22.13.5",
         "unstorage": "^1.15.0"
     },
